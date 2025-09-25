@@ -11,3 +11,5 @@ Finally, I merged all this data in order to create a dataset that collects elect
 Starting from this dataset, I was able to perform statistical analysis.
 
 The first stage was to perform linear regression and producing estimates of the ideological positions of precincts (`lmer_maps.R`)
+
+Then, Bayesian estimation of ideological positions of both precincts and candidates are tried through STAN software.
