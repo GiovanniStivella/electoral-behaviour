@@ -9,3 +9,5 @@ In order to account also for other demographic features of the precinct, I colle
 Finally, I merged all this data in order to create a dataset that collects electoral results, demographic composition and educational attainment in each precinct in Pennsylvania for each statewide election from 2016 to 2020 (`Merging.R`).
 
 Starting from this dataset, I was able to perform statistical analysis.
+
+The first stage was to perform linear regression and producing estimates of the ideological positions of precincts (`lmer_maps.R`)
