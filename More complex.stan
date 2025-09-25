@@ -30,7 +30,7 @@ data {
 
 parameters {
 
-  real<lower=0> sigma; // residual variance
+  real<lower=1e-6> sigma; // residual variance
 
   matrix[G, K] prec_ideo;
 
