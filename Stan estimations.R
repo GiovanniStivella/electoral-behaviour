@@ -82,7 +82,7 @@ george <- mediate$sample(
 
 summary_george <- as.data.frame(george$summary())
 
-write.csv(summary_george, "summary_0.5.csv")
+write.csv(summary_george, "summary_0.05.csv")
 
 
 #Multidimensional STAN model

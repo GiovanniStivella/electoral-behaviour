@@ -28,7 +28,7 @@ data {
 
 parameters {
 
-  real<lower=0> sigma; // residual variance
+  real<lower=1e-6> sigma; // residual variance
 
   vector[G] prec_ideo;
 
@@ -46,6 +46,6 @@ model {
 
   prec_ideo ~ std_normal();
 
-  cand_ideo ~ normal(dime, 0.5);
+  cand_ideo ~ normal(dime, 0.05);
 
 }
