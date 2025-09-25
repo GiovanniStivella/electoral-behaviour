@@ -81,7 +81,6 @@ george <- mediate$sample(
 
 
 summary_george <- as.data.frame(george$summary())
-summary_george_clinton <- as.data.frame(george$summary("cand_ideo[1]"))
 
 
 #Multidimensional STAN model
