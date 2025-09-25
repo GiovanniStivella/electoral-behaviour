@@ -1,7 +1,8 @@
 library(tidyr)
 library(dplyr)
 
-dime <-read.table("/Users/giovannistivella/Documents/Università/SSSUP/PSU/Data/dime_recipients_1979_2024.csv",
+#in order to change the path, follow https://www.dropbox.com/scl/fi/bcpmxvxwc7iwmqvchm2sp/dime_recipients_1979_2024.csv.gz?rlkey=4ii8765xw8y2svlzcbxzfvnbh&dl=1
+dime <-read.table("/Users/giovannistivella/Documents/Università/SSSUP/PSU/Data/dime_recipients_1979_2024.csv", 
                   header = TRUE,    # first row of file contains variable names
                   sep = ",",        # need to specify that the file is comma-separator
                   dec = ".")        # useless here (as it is the default), can be useful with Italian settings (dec = ",")
