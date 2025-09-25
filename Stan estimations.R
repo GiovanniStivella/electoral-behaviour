@@ -8,7 +8,7 @@ color_scheme_set("brightblue")
 
 #CONSTRUCTION OF THE NEEDED MATRICES
 
-lets <- read.csv('/Users/giovannistivella/Documents/Università/SSSUP/PSU/Data/Pennsylvania (going forward)/educ_data.csv')
+lets <- read.csv('educ_data.csv')
 
 #MATRIX OF ELECTORAL RESULTS
 g <- lets%>%
