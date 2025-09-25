@@ -56,7 +56,7 @@ m <- as.matrix(unname(h_clean)) - 0.5
 n <-m[1:100,]
 
 
-#STAN model
+#STAN model with one dimension
 
 inter <- file.path("Intermediate.stan")
 mediate <- cmdstan_model(inter)
@@ -83,9 +83,8 @@ george <- mediate$sample(
 summary_george <- as.data.frame(george$summary())
 summary_george_clinton <- as.data.frame(george$summary("cand_ideo[1]"))
 
-write.csv(summary_george, "one_dimension_estimate.csv")
 
-#Let's try directly with script from last meeting
+#Multidimensional STAN model
 
 comp <- file.path("More complex.stan")
 work <- cmdstan_model(comp)
