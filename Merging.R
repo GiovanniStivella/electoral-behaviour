@@ -85,7 +85,7 @@ simplified_data <- simplified_data %>%
 write.csv(simplified_data, "simplified_data.csv", row.names = FALSE)
 
 #We can now add other variables
-educ <-read.table("/Users/giovannistivella/Documents/Università/SSSUP/PSU/Data/Pennsylvania (going forward)/final_wide.csv",
+educ <-read.table("final_wide.csv",
                   header = TRUE,    # first row of file contains variable names
                   sep = ",",        # need to specify that the file is comma-separator
                   dec = ".")        # useless here (as it is the default), can be useful with Italian settings (dec = ",")
