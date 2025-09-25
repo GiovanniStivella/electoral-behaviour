@@ -65,42 +65,7 @@ easy_groups <- block_groups%>%
                    left_join(block_vtds_pair, by=c("block_group"="block_group"))%>%
                    filter(n_rows.x == n_rows.y)
 
-#Let's try with DISTRICT 42001000310 to start
-
-easy_42001000310 <- easy_groups%>%
-        filter(VTDST20GEOID == "42001000310")
-prova_42001000310 <- prova %>%
-  filter(GEOID %in% easy_42001000310$block_group) %>%
-  group_by(variable) %>%
-  summarise(total_estimate = sum(estimate, na.rm = TRUE)) %>%
-  mutate(VTDST20GEOID = "42001000310")
-
-#Let's try with a district that is not an easy one
-easy_421000010 <- easy_groups%>%
-  filter(VTDST20GEOID == "421000010")
-
-tedious_421000010 <- differences_weighted%>%
-  filter(VTDST20GEOID == "421000010")
-
-primo_421000010 <- prova %>%
-  filter(GEOID %in% easy_421000010$block_group) %>%
-  group_by(variable) %>%
-  summarise(easy_estimate = sum(estimate, na.rm = TRUE)) %>%
-  mutate(VTDST20GEOID = "421000010")
-
-aggiungi_421000010 <- prova%>%
-  filter(GEOID %in% tedious_421000010$block_group) %>%
-  group_by(variable) %>%
-  summarise(tedious_estimate = sum(estimate*(tedious_421000010$pop/tedious_421000010$group_pop), na.rm = TRUE)) %>%
-  mutate(VTDST20GEOID = "421000010")
-
-final_421000010 <- primo_421000010 %>%
-      left_join(aggiungi_421000010, by = c("variable"="variable", "VTDST20GEOID"="VTDST20GEOID"))%>%
-      mutate(total_estimate = coalesce(easy_estimate, 0) + coalesce(tedious_estimate, 0)) %>%
-      select(-c(easy_estimate, tedious_estimate))
-
-#Let's try to automate it, starting with easy vtds
-auto_easy_prova <- easy_groups %>%
+auto_easy <- easy_groups %>%
   split(.$VTDST20GEOID)%>%
   lapply(function(df) {
     prova %>%
@@ -111,7 +76,7 @@ auto_easy_prova <- easy_groups %>%
   }) %>%
   bind_rows()
 
-auto_tedious_prova <- differences_weighted %>%
+auto_tedious <- differences_weighted %>%
   split(.$VTDST20GEOID)%>%
   lapply(function(df) {
     prova %>%
@@ -122,8 +87,8 @@ auto_tedious_prova <- differences_weighted %>%
   }) %>%
   bind_rows()
 
-final <- auto_easy_prova %>%
-  full_join(auto_tedious_prova, by = c("variable"="variable", "VTDST20GEOID"="VTDST20GEOID"))%>%
+final <- auto_easy %>%
+  full_join(auto_tedious, by = c("variable"="variable", "VTDST20GEOID"="VTDST20GEOID"))%>%
   mutate(total_estimate = coalesce(easy_estimate, 0) + coalesce(tedious_estimate, 0))%>%
   select("VTDST20GEOID", "variable", "total_estimate")
 
