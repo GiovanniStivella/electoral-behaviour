@@ -69,20 +69,6 @@ ggplot(pa_simple_ranef) +
     na.value = "grey"
   )
 
-pa_huntingdon <- pa_voting_districts %>%
-  left_join(prep, by = c("GEOID20" = "GEOID20")) %>%
-  filter(COUNTYFP20 == "061")
-
-ggplot(pa_huntingdon) + 
-  geom_sf(aes(fill = ranef_simple), linewidth = 0) + 
-  theme_void() +
-  scale_fill_gradient2(
-    name = "ideological_estimate",
-    high = "#8B0000",   # red
-    low = "#00008B",  #blue
-    na.value = "grey"
-  )
-
 #Let's add year random effects: there have been years where one party had more favorable environment
 
 year <- lmer(y ~ (1|election_year)+(1|GEOID20)+per_vap_hisp+per_vap_white+per_vap_black+per_vap_aian+per_vap_asian+per_vap_nhpi+per_vap_other+per_vap_two, 
