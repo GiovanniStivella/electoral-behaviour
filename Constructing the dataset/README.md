@@ -1,3 +1,5 @@
+# Constructing the dataset
+
 I firstly took electoral data at precinct-level from ALARM dataset, which also includes ethnic composition of precincts (`Preprocessing_ALARM.R`).
 Then, I took estimates of candidates' ideological positions as estimated by DIME (`Preprocessing_DIME.R`)
 In order to account also for other demographic features of the precinct, I collected data from census at a precinct-level (`tidycensus.R`).
