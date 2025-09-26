@@ -10,9 +10,9 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-prep <- read.csv('simplified_data.csv')
+prep <- read.csv('Constructing the dataset\simplified_data.csv')
 
-educ <- read.csv('educ_data.csv')
+educ <- read.csv('Constructing the dataset\educ_data.csv')
 
 super_educ <- pa_voting_districts %>%
   left_join(educ, by = c("GEOID20" = "GEOID20"))
