@@ -133,3 +133,34 @@ ggplot(ranef_election_y, aes(x = Election, y = ranef_election)) +
 
 fixed_effects_election <- broom.mixed::tidy(election, effects = "fixed") %>%
   select(term, estimate)
+
+
+#We might now add at least an education variable: the percentage of people with a college degree
+educ <- educ %>% 
+  mutate(y = (share_1-1/2)/diff_comp)
+educ <- educ %>% 
+  mutate(bach = (per_B15003_022 + per_B15003_023 + per_B15003_024 + per_B15003_025))
+
+ed_simple <- lmer(y ~ per_vap_hisp+per_vap_white+per_vap_black+per_vap_aian+per_vap_asian+per_vap_nhpi+per_vap_other+per_vap_two+bach+(1|GEOID20),
+               data = educ)
+
+# Show random effects for each GEOID20
+ranef_ed_simple <- ranef(ed_simple)$GEOID20 %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("GEOID20") %>% 
+  rename(ranef_ed_simple = `(Intercept)`)
+
+educ_simple <- educ%>%left_join(ranef_ed_simple, by = c("GEOID20"="GEOID20"))
+
+pa_simple_ed_ranef <- pa_voting_districts %>%
+  left_join(educ_simple, by = c("GEOID20" = "GEOID20"))
+
+ggplot(pa_simple_ed_ranef) + 
+  geom_sf(aes(fill = ranef_ed_simple), linewidth = 0) + 
+  theme_void() +
+  scale_fill_gradient2(
+    name = "ideological_estimate",
+    high = "#8B0000",   # red
+    low = "#00008B",  #blue
+    na.value = "grey"
+  )
