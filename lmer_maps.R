@@ -10,9 +10,9 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-prep <- read.csv('Constructing the dataset\simplified_data.csv')
+prep <- read.csv('simplified_data.csv')
 
-educ <- read.csv('Constructing the dataset\educ_data.csv')
+educ <- read.csv('educ_data.csv')
 
 super_educ <- pa_voting_districts %>%
   left_join(educ, by = c("GEOID20" = "GEOID20"))
@@ -69,6 +69,10 @@ ggplot(pa_simple_ranef) +
     na.value = "grey"
   )
 
+#Show effects of ethnic composition
+fixed_effects_simple <- broom.mixed::tidy(simple, effects = "fixed") %>%
+  select(term, estimate)
+
 #Let's add year random effects: there have been years where one party had more favorable environment
 
 year <- lmer(y ~ (1|election_year)+(1|GEOID20)+per_vap_hisp+per_vap_white+per_vap_black+per_vap_aian+per_vap_asian+per_vap_nhpi+per_vap_other+per_vap_two, 
@@ -106,6 +110,9 @@ ggplot(pa_year_ranef) +
     na.value = "grey"
   )
 
+fixed_effects_year <- broom.mixed::tidy(year, effects = "fixed") %>%
+  select(term, estimate)
+
 #Let's add election random effects: there have been elections that have favored one party over the other
 #Election random effects may be more interesting: they may account for characteristics of candidates that are not described by their ideological score
 
@@ -123,3 +130,6 @@ ggplot(ranef_election_y, aes(x = Election, y = ranef_election)) +
   geom_col() +
   labs(x = "Election", y = "Random Effect", title = "Random Effects by Election") +
   theme_minimal()
+
+fixed_effects_election <- broom.mixed::tidy(election, effects = "fixed") %>%
+  select(term, estimate)
