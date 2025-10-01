@@ -27,7 +27,12 @@ data {
   vector[C] dime;
   
   matrix[G,M] demo;
+  
+}
 
+transformed data {
+  vector[G] ones;
+  ones = rep_vector(1, G);
 }
 
 parameters {
@@ -46,7 +51,7 @@ parameters {
 
 model {
 
-  matrix[G, T] lin_pred = (b0) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + (prec_ideo) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + demo * demo_impact * (cand_ideo[cand_a] - cand_ideo[cand_b])';
+  matrix[G, T] lin_pred = b0 * ones * (cand_ideo[cand_a] - cand_ideo[cand_b])' + (prec_ideo) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + demo * demo_impact * (cand_ideo[cand_a] - cand_ideo[cand_b])';
 
   to_vector(share) ~ normal(to_vector(lin_pred), sigma);
   

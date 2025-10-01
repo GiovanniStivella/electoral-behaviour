@@ -10,6 +10,14 @@ color_scheme_set("brightblue")
 
 lets <- read.csv('educ_data.csv')
 
+na_rows_share <- lets %>% filter(is.na(share_1))
+dem <- lets%>%
+  mutate (bach = rowSums(select(lets,55:58)))%>%
+  filter(!GEOID20 %in% na_rows_prec$GEOID20)%>%
+  select(1, 22:29, last_col())%>%
+  unique()%>%
+  filter(complete.cases(.))
+
 #MATRIX OF ELECTORAL RESULTS
 g <- lets%>%
   mutate(election = paste(lets[[13]], lets[[14]]))%>%
@@ -17,10 +25,9 @@ g <- lets%>%
 
 #pivot wider
 h <- g %>%
-  pivot_wider(names_from = election, values_from = share_1)%>%
-  select(-c(1))
+  pivot_wider(names_from = election, values_from = share_1)
 
-h_clean <- h %>% drop_na()
+h_clean <- h %>% drop_na() %>% filter(GEOID20 %in% dem$GEOID20) %>% select(-c(1))
 
 #h_clean transposed
 h_clean_t <- as.data.frame(t(h_clean))
@@ -52,25 +59,20 @@ cand_b <- cand %>%
 dime <- cand_long %>% select(2)
 
 #DEMOGRAPHIC DATA
-na_rows_prec <- lets %>% filter(is.na(share_1))
-dem <- lets%>%
-  mutate (bach = rowSums(select(lets,55:58)))%>%
-  filter(!GEOID20 %in% na_rows_prec$GEOID20)%>%
-  select(1, 22:29, last_col())%>%
-  unique()%>%
-  select(-c(1))
-
+dem1 <- dem%>%select(-c(1))
 
 m <- as.matrix(unname(h_clean)) - 0.5
 
 n <-m[1:100,]
 
+r <-dem1[1:100,]
+
 #One dimension
 
-one <- file.path("Demographics.stan")
+one <- file.path("~/Electoral Behaviour/Bayesian estimation/Demographics.stan")
 dimension <- cmdstan_model(one)
 
-listmed <- list(
+listry <- list(
   T = ncol(h_clean),
   C = 12,
   G = 100,
@@ -79,11 +81,11 @@ listmed <- list(
   cand_a = as.numeric(unlist(cand_a)),
   cand_b = as.numeric(unlist(cand_b)),
   dime = as.numeric(unlist(dime)),
-  demo = as.matrix(unname(dem))
+  demo = as.matrix(unname(r))
 )
 
-george <- mediate$sample(
-  data = listmed,
+george <- dimension$sample(
+  data = listry,
   seed = 123,
   chains = 4,
   parallel_chains = 4,
