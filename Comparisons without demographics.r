@@ -82,9 +82,6 @@ fix <- prec$sample(
 
 summary_fix <- as.data.frame(fix$summary())
 
-write.csv(summary_fix, "summary_fixed_ideology.csv")
-
-
 #Taking a linear model without demographic covariates
 na_rows_prec <- lets %>% filter(is.na(share_1))
 lets_clean <- lets %>% filter(!GEOID20 %in% na_rows_prec$GEOID20)
@@ -100,4 +97,18 @@ ranef_comp <- ranef(comp)$GEOID20 %>%
   tibble::rownames_to_column("GEOID20") %>% 
   rename(ranef_simple = `(Intercept)`)
 
-write.csv(ranef_comp, "ranef_comp.csv")
+
+#COMPARISON
+summary_fix_c <- summary_fix[3:nrow(summary_fix), 2]
+scat <- cbind(ranef_comp, summary_fix_c)
+
+# Scatterplot
+plot(scat$ranef_simple, scat$summary_fix_c,
+     main = "Correlation of two estimates",
+     xlab = "x",
+     ylab = "y",
+     pch = 19, col = "blue")
+
+# Add correlation in title
+cor_value <- cor(scat$ranef_simple, scat$summary_fix_c)
+mtext(paste("Correlation =", cor_value))
