@@ -58,5 +58,5 @@ model {
 
   prec_ideo[, 1] ~ std_normal();
 
-  cand_ideo[, 1] ~ normal(dime, 0.0005);
+  cand_ideo[, 1] ~ normal(dime, 0.05);
 }

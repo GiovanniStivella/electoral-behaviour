@@ -8,6 +8,8 @@ library(ggplot2)
 
 pa_voting_districts <- voting_districts("PA")
 
+pa_voting_districts <- sf::read_sf("tl_2020_51_vtd20")
+
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
 prep <- read.csv('simplified_data.csv')

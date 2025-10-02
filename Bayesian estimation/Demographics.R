@@ -135,6 +135,9 @@ fixed_effects_rest <- broom.mixed::tidy(rest, effects = "fixed") %>%
 summary_george_c <- summary_george[3:102, 2]
 scat <- cbind(ranef_rest, summary_george_c)
 
+summary_george_f <- summary_george[116:124, 1:2]
+fscat <- cbind(fixed_effects_rest, summary_george_f)
+
 # Scatterplot
 plot(scat$ranef_rest, scat$summary_george_c,
      main = "Correlation of two estimates",

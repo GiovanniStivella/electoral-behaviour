@@ -1,3 +1,4 @@
+library(ggplot2)
 library(tidyr)
 library(dplyr)
 library(broom)
@@ -110,3 +111,30 @@ ringo <- work$sample(
 )
 
 summary_ringo <- as.data.frame(ringo$summary())
+
+summary_bi <- summary_ringo[3:226, 1:2]
+
+summary_bi_prec <- data.frame(
+  V1_1 = summary_bi[1:100, 1],
+  V1_2 = summary_bi[101:200, 1],
+  V2_1 = summary_bi[1:100, 2],
+  V2_2 = summary_bi[101:200, 2]
+)
+
+ggplot(summary_bi_prec, aes(x = V2_1, y = V2_2)) +
+  geom_point() +
+  labs(x = "Dimension 1", y = "Dimension 2", title = "Bidimensional Plot of Estimates") +
+  theme_minimal()
+
+summary_bi_cand <- data.frame(
+  V1_1 = summary_bi[201:213, 1],
+  V1_2 = summary_bi[214:226, 1],
+  V2_1 = summary_bi[201:213, 2],
+  V2_2 = summary_bi[214:226, 2]
+)
+
+ggplot(summary_bi_cand, aes(x = V2_1, y = V2_2)) +
+  geom_point() +
+  labs(x = "Dimension 1", y = "Dimension 2", title = "Bidimensional Plot of Estimates") +
+  theme_minimal()
+
