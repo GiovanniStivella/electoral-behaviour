@@ -28,6 +28,7 @@ data {
   
   matrix[G,M] demo;
   
+  real<lower=0> dime_prior;
 }
 
 transformed data {
@@ -51,14 +52,20 @@ parameters {
 
 model {
 
-  matrix[G, T] lin_pred = b0 * ones * (cand_ideo[cand_a] - cand_ideo[cand_b])' + (prec_ideo) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + demo * demo_impact * (cand_ideo[cand_a] - cand_ideo[cand_b])';
+  matrix[G, T] lin_pred = b0 * ones * (cand_ideo[cand_a] - cand_ideo[cand_b])' +
+  
+  (prec_ideo) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + 
+  
+  demo * demo_impact * (cand_ideo[cand_a] - cand_ideo[cand_b])';
 
   to_vector(share) ~ normal(to_vector(lin_pred), sigma);
   
   sigma ~ exponential (1);
 
   prec_ideo ~ std_normal();
+  
+  demo_impact ~ normal(0, 2);
 
-  cand_ideo ~ normal(dime, 0.05);
+  cand_ideo ~ normal(dime, dime_prior);
 
 }

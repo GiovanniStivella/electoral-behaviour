@@ -59,7 +59,7 @@ n <-m[1:100,]
 
 #STAN model with one dimension
 
-inter <- file.path("Intermediate.stan")
+inter <- file.path('/Users/giovannistivella/Electoral Behaviour/Bayesian estimation/Intermediate.stan')
 mediate <- cmdstan_model(inter)
 
 listmed <- list(
@@ -88,7 +88,7 @@ write.csv(summary_george, "summary_0.05.csv")
 
 #Multidimensional STAN model
 
-comp <- file.path("More complex.stan")
+comp <- file.path('/Users/giovannistivella/Electoral Behaviour/Bayesian estimation/More complex.stan')
 work <- cmdstan_model(comp)
 
 listfour <- list(
@@ -99,7 +99,8 @@ listfour <- list(
   share = as.matrix(unname(n)),
   cand_a = as.numeric(unlist(cand_a)),
   cand_b = as.numeric(unlist(cand_b)),
-  dime = as.numeric(unlist(dime))
+  dime = as.numeric(unlist(dime)),
+  dime_prior = 0.5
 )
 
 ringo <- work$sample(
@@ -115,10 +116,10 @@ summary_ringo <- as.data.frame(ringo$summary())
 summary_bi <- summary_ringo[3:226, 1:2]
 
 summary_bi_prec <- data.frame(
-  V1_1 = summary_bi[1:100, 1],
-  V1_2 = summary_bi[101:200, 1],
-  V2_1 = summary_bi[1:100, 2],
-  V2_2 = summary_bi[101:200, 2]
+  V1_1 = summary_bi[3:102, 1],
+  V1_2 = summary_bi[103:202, 1],
+  V2_1 = summary_bi[3:102, 2],
+  V2_2 = summary_bi[103:202, 2]
 )
 
 ggplot(summary_bi_prec, aes(x = V2_1, y = V2_2)) +
@@ -127,10 +128,10 @@ ggplot(summary_bi_prec, aes(x = V2_1, y = V2_2)) +
   theme_minimal()
 
 summary_bi_cand <- data.frame(
-  V1_1 = summary_bi[201:213, 1],
-  V1_2 = summary_bi[214:226, 1],
-  V2_1 = summary_bi[201:213, 2],
-  V2_2 = summary_bi[214:226, 2]
+  V1_1 = summary_bi[201:212, 1],
+  V1_2 = summary_bi[213:224, 1],
+  V2_1 = summary_bi[201:212, 2],
+  V2_2 = summary_bi[213:224, 2]
 )
 
 ggplot(summary_bi_cand, aes(x = V2_1, y = V2_2)) +

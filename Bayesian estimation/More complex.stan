@@ -25,6 +25,8 @@ data {
   array[T] int<lower=1, upper=C> cand_b;
 
   vector[C] dime;
+  
+  real<lower=0> dime_prior;
 
 }
 
@@ -58,5 +60,5 @@ model {
 
   prec_ideo[, 1] ~ std_normal();
 
-  cand_ideo[, 1] ~ normal(dime, 0.05);
+  cand_ideo[, 1] ~ normal(dime, dime_prior);
 }
