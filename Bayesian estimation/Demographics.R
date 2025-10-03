@@ -60,7 +60,7 @@ cand_b <- cand %>%
 dime <- cand_long %>% select(2)
 
 #DEMOGRAPHIC DATA
-dem1 <- dem%>%select(-c(1, 5, 6, 7, 8, 9))
+dem1 <- dem%>%select(-c(1, 3, 4, 5, 6, 7, 8, 9))
 
 m <- as.matrix(unname(h_clean)) - 0.5
 
@@ -77,7 +77,7 @@ listry <- list(
   T = ncol(h_clean),
   C = 12,
   G = 100,
-  M = 4,
+  M = 2,
   share = as.matrix(unname(n)),
   cand_a = as.numeric(unlist(cand_a)),
   cand_b = as.numeric(unlist(cand_b)),
