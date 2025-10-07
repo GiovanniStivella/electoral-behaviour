@@ -115,7 +115,7 @@ listabianca <- list(
 )
 
 pian <- multi$sample(
-  data = listanera,
+  data = listabianca,
   seed = 123,
   chains = 4,
   parallel_chains = 4,
@@ -124,3 +124,20 @@ pian <- multi$sample(
 
 
 summary_pian <- as.data.frame(pian$summary())
+
+#SUPERSUMMARY
+supersummary <- summary_tego%>%
+  left_join(summary_pian, by= "variable",  suffix = c("_tego", "_pian"))%>%
+  select(1,2,11)
+
+superplot <- supersummary%>%slice(2:nrow(supersummary))
+
+plot(superplot$mean_tego, superplot$mean_pian,
+     main = "Correlation of two estimates",
+     xlab = "x",
+     ylab = "y",
+     pch = 19, col = "blue")
+
+# Add correlation in title
+cor_value <- cor(superplot$mean_tego, superplot$mean_pian)
+mtext(paste("Correlation =", cor_value))

@@ -44,7 +44,7 @@ parameters {
   vector[K] weights;
   
   matrix[M, K] demo_impact;
-
+  
 }
 
 model {
@@ -57,7 +57,7 @@ model {
   
   sigma ~ exponential (1);
 
-  prec_ideo[, 1] ~ std_normal();
+  prec_ideo[, 1] ~ normal(0,3);
 
   cand_ideo[, 1] ~ normal(dime, dime_prior);
   
@@ -67,13 +67,14 @@ model {
   
   for (k in 2:K) {
 
-    prec_ideo[, k] ~ std_normal();
+    prec_ideo[, k] ~ normal(0, 3);
 
-    cand_ideo[, k] ~ std_normal();
+    cand_ideo[, k] ~ normal(0, 3);
     
     demo_impact[, k] ~ normal(0, 2);
 
   }
+  
 
 
 }
