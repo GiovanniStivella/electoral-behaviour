@@ -140,7 +140,7 @@ plot(superplot$mean_tego, superplot$mean_pian,
      pch = 19, col = "blue")
 
 
-tego_wide <- summary_pian %>%
+pian_wide <- summary_pian %>%
   select(1,2)%>%
   slice(3:nrow(supersummary))%>%
   separate(variable,
@@ -152,14 +152,111 @@ tego_wide <- summary_pian %>%
               values_from = mean,
               names_prefix = "value_")
 
-tego_prec <- tego_wide%>%slice(1:100)
+pian_prec <- pian_wide%>%slice(1:100)
 
-plot(tego_prec$`value_1]`, tego_prec$`value_2]`)
+plot(pian_prec$`value_1]`, pian_prec$`value_2]`)
 
-tego_cand <- tego_wide%>%slice(101:112)
+pian_cand <- pian_wide%>%slice(101:112)
 
-plot(tego_cand$`value_1]`, tego_cand$`value_2]`)
-text(tego_cand$`value_1]`, tego_cand$`value_2]`, labels = tego_cand$unit, pos = 4, cex = 0.8)
+plot(pian_cand$`value_1]`, pian_cand$`value_2]`)
+text(pian_cand$`value_1]`, pian_cand$`value_2]`, labels = cand_long$candidate_name, pos = 4, cex = 0.8)
 
-plot(tego_cand$`value_1]`, tego_cand$`value_2]`)
-text(tego_cand$`value_1]`, tego_cand$`value_2]`, labels = cand_long$candidate_name, pos = 4, cex = 0.8)
+#Let's take it more radical
+listand <- list(
+  T = ncol(h_clean),
+  C = 12,
+  G = 100,
+  M = 2,
+  K = 2,
+  share = as.matrix(unname(n)),
+  cand_a = as.numeric(unlist(cand_a)),
+  cand_b = as.numeric(unlist(cand_b)),
+  dime = as.numeric(unlist(dime)),
+  demo = as.matrix(unname(r)),
+  dime_prior = 2
+)
+
+ber <- multi$sample(
+  data = listand,
+  seed = 123,
+  chains = 4,
+  parallel_chains = 4,
+  refresh = 500 # print update every 500 iters
+)
+
+
+summary_ber <- as.data.frame(ber$summary())
+
+
+ber_wide <- summary_ber %>%
+  select(1,2)%>%
+  slice(3:nrow(supersummary))%>%
+  separate(variable,
+           into = c("unit", "dimension"),
+           sep = ",",
+           extra = "merge",   # if there are >1 commas, everything after 1st goes into after_comma
+           fill = "right") %>%
+  pivot_wider(names_from = dimension,
+              values_from = mean,
+              names_prefix = "value_")
+
+ber_prec <- ber_wide%>%slice(1:100)
+
+plot(ber_prec$`value_1]`, ber_prec$`value_2]`)
+
+ber_cand <- ber_wide%>%slice(101:112)
+
+plot(ber_cand$`value_1]`, ber_cand$`value_2]`)
+text(ber_cand$`value_1]`, ber_cand$`value_2]`, labels = cand_long$candidate_name, pos = 4, cex = 0.8)
+
+
+#EXTREME
+ext <- file.path("~/Electoral Behaviour/Bayesian estimation/NoDime.stan")
+reme <- cmdstan_model(ext)
+
+listreme <- list(
+  T = ncol(h_clean),
+  C = 12,
+  G = 100,
+  M = 2,
+  K = 2,
+  share = as.matrix(unname(n)),
+  cand_a = as.numeric(unlist(cand_a)),
+  cand_b = as.numeric(unlist(cand_b)),
+  dime = as.numeric(unlist(dime)),
+  demo = as.matrix(unname(r))
+)
+
+unc <- reme$sample(
+  data = listreme,
+  seed = 123,
+  chains = 4,
+  parallel_chains = 4,
+  refresh = 500 # print update every 500 iters
+)
+
+
+summary_unc <- as.data.frame(unc$summary())
+
+
+unc_wide <- summary_unc %>%
+  select(1,2)%>%
+  slice(3:nrow(supersummary))%>%
+  separate(variable,
+           into = c("unit", "dimension"),
+           sep = ",",
+           extra = "merge",   # if there are >1 commas, everything after 1st goes into after_comma
+           fill = "right") %>%
+  pivot_wider(names_from = dimension,
+              values_from = mean,
+              names_prefix = "value_")
+
+unc_prec <- unc_wide%>%slice(1:100)
+
+plot(unc_prec$`value_1]`, unc_prec$`value_2]`)
+
+unc_cand <- unc_wide%>%slice(101:112)
+
+plot(unc_cand$`value_1]`, unc_cand$`value_2]`)
+text(unc_cand$`value_1]`, unc_cand$`value_2]`, labels = cand_long$candidate_name, pos = 4, cex = 0.8)
+
