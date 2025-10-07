@@ -5,6 +5,7 @@ library(broom)
 library(cmdstanr)
 library(posterior)
 library(bayesplot)
+library(tidyverse)
 color_scheme_set("brightblue")
 
 #CONSTRUCTION OF THE NEEDED MATRICES
@@ -138,6 +139,27 @@ plot(superplot$mean_tego, superplot$mean_pian,
      ylab = "y",
      pch = 19, col = "blue")
 
-# Add correlation in title
-cor_value <- cor(superplot$mean_tego, superplot$mean_pian)
-mtext(paste("Correlation =", cor_value))
+
+tego_wide <- summary_pian %>%
+  select(1,2)%>%
+  slice(3:nrow(supersummary))%>%
+  separate(variable,
+           into = c("unit", "dimension"),
+           sep = ",",
+           extra = "merge",   # if there are >1 commas, everything after 1st goes into after_comma
+           fill = "right") %>%
+  pivot_wider(names_from = dimension,
+              values_from = mean,
+              names_prefix = "value_")
+
+tego_prec <- tego_wide%>%slice(1:100)
+
+plot(tego_prec$`value_1]`, tego_prec$`value_2]`)
+
+tego_cand <- tego_wide%>%slice(101:112)
+
+plot(tego_cand$`value_1]`, tego_cand$`value_2]`)
+text(tego_cand$`value_1]`, tego_cand$`value_2]`, labels = tego_cand$unit, pos = 4, cex = 0.8)
+
+plot(tego_cand$`value_1]`, tego_cand$`value_2]`)
+text(tego_cand$`value_1]`, tego_cand$`value_2]`, labels = cand_long$candidate_name, pos = 4, cex = 0.8)
