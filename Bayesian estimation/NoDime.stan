@@ -29,6 +29,8 @@ data {
   vector[C] dime;
   
   matrix[G,M] demo;
+  
+  real<lower=1e-6> w_sigma;
 
 }
 
@@ -62,7 +64,7 @@ model {
   
   demo_impact[, 1] ~ normal(0, 2);
   
-  weights ~ normal(0.5,0.5);
+  weights ~ normal(0.5,w_sigma);
   
   for (k in 2:K) {
 
