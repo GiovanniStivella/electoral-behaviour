@@ -107,11 +107,11 @@ eff_wide <- summary_eff %>%
               values_from = mean,
               names_prefix = "value_")
 
-eff_prec <- eff_wide%>%slice(1:100)
+eff_prec <- eff_wide%>%slice(1:9167)
 
 plot(eff_prec$`value_1]`, eff_prec$`value_2]`)
 
-eff_cand <- eff_wide%>%slice(101:112)
+eff_cand <- eff_wide%>%slice(9168:9179)
 
 plot(eff_cand$`value_1]`, eff_cand$`value_2]`)
 
@@ -125,4 +125,3 @@ text(
   cex = 0.8,
   col = colors
 )
-

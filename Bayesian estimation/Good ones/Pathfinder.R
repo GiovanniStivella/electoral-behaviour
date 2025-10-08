@@ -8,6 +8,7 @@ library(bayesplot)
 library(tidyverse)
 color_scheme_set("brightblue")
 
+
 #CONSTRUCTION OF THE NEEDED MATRICES
 
 lets <- read.csv('educ_data.csv')
@@ -69,7 +70,6 @@ n <-m[1:100,]
 
 r <-dem1[1:100,]
 
-
 #ESTIMATION
 est <- file.path("~/Electoral Behaviour/Bayesian estimation/NoDime.stan")
 matio <- cmdstan_model(est)
@@ -88,20 +88,16 @@ listreme <- list(
   w_par = 1
 )
 
-unc <- matio$sample(
-  data = listreme,
-  seed = 123,
-  chains = 4,
-  parallel_chains = 4,
-  refresh = 100 # print update every 100 iters
+path <- matio$pathfinder(
+  data = listreme
 )
 
-summary_unc <- as.data.frame(unc$summary())
+summary_path <- as.data.frame(path$summary())
 
 
-unc_wide <- summary_unc %>%
+path_wide <- summary_path %>%
   select(1,2)%>%
-  slice(3:nrow(summary_unc))%>%
+  slice(5:nrow(summary_path))%>%
   separate(variable,
            into = c("unit", "dimension"),
            sep = ",",
@@ -111,19 +107,19 @@ unc_wide <- summary_unc %>%
               values_from = mean,
               names_prefix = "value_")
 
-unc_prec <- unc_wide%>%slice(1:9167)
+path_prec <- path_wide%>%slice(1:9167)
 
-plot(unc_prec$`value_1]`, unc_prec$`value_2]`)
+plot(path_prec$`value_1]`, path_prec$`value_2]`)
 
-unc_cand <- unc_wide%>%slice(9168:9179)
+path_cand <- path_wide%>%slice(9168:9179)
 
-plot(unc_cand$`value_1]`, unc_cand$`value_2]`)
+plot(path_cand$`value_1]`, path_cand$`value_2]`)
 
 colors <- ifelse(cand_long$candidate_number %% 2 == 1, "blue", "red")
 
 text(
-  unc_cand$`value_1]`,
-  unc_cand$`value_2]`,
+  path_cand$`value_1]`,
+  path_cand$`value_2]`,
   labels = cand_long$candidate_name,
   pos = 4,
   cex = 0.8,
