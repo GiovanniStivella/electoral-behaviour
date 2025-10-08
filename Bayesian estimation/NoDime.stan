@@ -30,7 +30,7 @@ data {
   
   matrix[G,M] demo;
   
-  real<lower=1e-6> w_sigma;
+  real<lower=1e-6> w_par;
 
 }
 
@@ -42,15 +42,23 @@ parameters {
 
   matrix[C, K] cand_ideo;
   
-  vector[K] weights;
+  array[K] real<lower=1e-6> weights;
   
   matrix[M, K] demo_impact;
   
 }
 
+transformed parameters{
+  
+  vector[K] w;
+  
+  w = to_vector(weights);
+  
+}
+
 model {
 
-  matrix[G, T] lin_pred = (prec_ideo) * diag_matrix(weights) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + 
+  matrix[G, T] lin_pred = (prec_ideo) * diag_matrix(w) * (cand_ideo[cand_a] - cand_ideo[cand_b])' + 
   
   demo * demo_impact * (cand_ideo[cand_a] - cand_ideo[cand_b])';
 
@@ -64,7 +72,7 @@ model {
   
   demo_impact[, 1] ~ normal(0, 2);
   
-  weights ~ normal(0.5,w_sigma);
+  weights ~ exponential(w_par);
   
   for (k in 2:K) {
 
