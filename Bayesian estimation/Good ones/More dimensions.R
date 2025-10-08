@@ -131,3 +131,6 @@ text(
   cex = 0.8,
   col = colors
 )
+
+
+points3D(three_cand$`value_1]`, three_cand$`value_2]`,  three_cand$`value_3]`)
