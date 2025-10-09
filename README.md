@@ -8,5 +8,5 @@ I performed linear regression to produce estimates of the ideological positions 
 
 In the folder `Bayesian estimation` I collected the scripts of R and Stan used to perform Bayesian estimate of ideological scores of both the precincts and the candidates.
 
-Finally, I compared results obtained through linear regression and results obtained through Bayesian estimation (`Comparisons without demographics.R` and `Fixed candidate ideology.stan`).
+I compared results obtained through linear regression and preliminary results obtained through Bayesian estimation (`Comparisons without demographics.R` and `Fixed candidate ideology.stan`).
 In particular, in this comparison I took a linear regression that does not account for demographic characteristics and I compared it with a Bayesian estimation of ideology of precincts taking ideology of candidates fixed according to DIME scores. As the ideological positions of precincts estimated by linear regression follow a distribution that resembles a Normal distribution, I expect nearly identical results when I estimate through Bayesian estimation with a Normal prior.
