@@ -10,11 +10,11 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-laplace <- laplace_estimation_good_ones_parameters
+#summary <-readRDS()
 
-laplace_wide <- laplace %>%
+summary_wide <- summary %>%
   select(1,2)%>%
-  slice(4:nrow(laplace))%>%
+  slice(3:nrow(summary))%>% #select the right number
   separate(variable,
            into = c("unit", "dimension"),
            sep = ",",
@@ -24,7 +24,9 @@ laplace_wide <- laplace %>%
               values_from = mean,
               names_prefix = "value_")
 
-laplace_prec <- laplace_wide[1:9167, ]%>%select(c(1:3))
+summary_prec <- summary_wide%>%slice(1:9167)%>%select(c(1:3))
+
+plot(summary_prec$`value_1]`, summary_prec$`value_2]`)
 
 lets <- read.csv('educ_data.csv')
 
@@ -37,7 +39,7 @@ dem <- lets%>%
   filter(complete.cases(.))
 
 #COMPLETE TABLE
-table <- cbind(dem, laplace_prec)
+table <- cbind(dem, summary_prec)
 
 super_table <- pa_voting_districts %>%
   left_join(table, by = c("GEOID20" = "GEOID20"))
