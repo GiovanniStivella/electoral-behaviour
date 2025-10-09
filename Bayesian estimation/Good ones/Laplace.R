@@ -97,7 +97,7 @@ summary_eff <- as.data.frame(eff$summary())
 
 eff_wide <- summary_eff %>%
   select(1,2)%>%
-  slice(3:nrow(summary_eff))%>%
+  slice(4:nrow(summary_eff))%>%
   separate(variable,
            into = c("unit", "dimension"),
            sep = ",",
@@ -125,3 +125,5 @@ text(
   cex = 0.8,
   col = colors
 )
+
+
