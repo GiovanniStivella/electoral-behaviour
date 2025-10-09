@@ -10,7 +10,7 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-#summary <-readRDS()
+summary <- readRDS("~/Electoral Behaviour/RDS/MCMC_summary_seed123.rds")
 
 summary_wide <- summary %>%
   select(1,2)%>%
@@ -28,6 +28,8 @@ summary_prec <- summary_wide%>%slice(1:9167)%>%select(c(1:3))
 
 plot(summary_prec$`value_1]`, summary_prec$`value_2]`)
 
+
+#ADDING PRECINCT CODES
 lets <- read.csv('educ_data.csv')
 
 na_rows_share <- lets %>% filter(is.na(share_1))
