@@ -10,3 +10,5 @@ In the folder `Bayesian estimation` I collected the scripts of R and Stan used t
 
 I compared results obtained through linear regression and preliminary results obtained through Bayesian estimation (`Comparisons without demographics.R` and `Fixed candidate ideology.stan`).
 In particular, in this comparison I took a linear regression that does not account for demographic characteristics and I compared it with a Bayesian estimation of ideology of precincts taking ideology of candidates fixed according to DIME scores. As the ideological positions of precincts estimated by linear regression follow a distribution that resembles a Normal distribution, I expect nearly identical results when I estimate through Bayesian estimation with a Normal prior.
+
+Results obtained through more complete Bayesian estimations are collected in the subfolder `Good ones` within the folder `Bayesian estimation` and their visualisation are contained in the subfolder `Plots`.
