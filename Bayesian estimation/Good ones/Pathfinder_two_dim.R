@@ -89,7 +89,8 @@ listreme <- list(
 )
 
 path <- matio$pathfinder(
-  data = listreme
+  data = listreme,
+  seed = 456
 )
 
 summary_path <- as.data.frame(path$summary())
