@@ -10,7 +10,7 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-summary <- readRDS("~/Electoral Behaviour/RDS/MCMC_summary_seed123.rds")
+summary <- readRDS("~/Electoral Behaviour/RDS/MCMC_summary_seed456.rds")
 
 summary_wide <- summary %>%
   select(1,2)%>%
