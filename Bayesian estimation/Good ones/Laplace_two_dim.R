@@ -90,7 +90,7 @@ listreme <- list(
 
 laplace <- matio$laplace(
   data = listreme,
-  seed = 123
+  seed = 321
 )
 
 summary_laplace <- as.data.frame(laplace$summary())
