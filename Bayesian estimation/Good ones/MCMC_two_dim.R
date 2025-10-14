@@ -90,7 +90,7 @@ listreme <- list(
 
 unc <- matio$sample(
   data = listreme,
-  seed = 456,
+  seed = 321,
   chains = 4,
   parallel_chains = 4,
   refresh = 100 # print update every 100 iters
