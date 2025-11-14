@@ -5,10 +5,13 @@ library(broom)
 library(broom.mixed)
 library(tigris)
 library(ggplot2)
+library(knitr)
+library(xtable)
+
 
 pa_voting_districts <- voting_districts("PA")
 
-pa_voting_districts <- sf::read_sf("tl_2020_51_vtd20")
+#pa_voting_districts <- sf::read_sf("tl_2020_51_vtd20")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
@@ -166,3 +169,9 @@ ggplot(pa_simple_ed_ranef) +
     low = "#00008B",  #blue
     na.value = "grey"
   )
+
+#Show effects of demographics
+effects_demographics <- broom.mixed::tidy(ed_simple, effects = "fixed") %>%
+  select(term, estimate)
+kable(effects_demographics, format = "latex")
+print(xtable(effects_demographics), include.rownames = FALSE)
