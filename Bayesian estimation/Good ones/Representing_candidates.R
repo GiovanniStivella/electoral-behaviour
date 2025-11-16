@@ -8,7 +8,7 @@ library(bayesplot)
 library(tidyverse)
 color_scheme_set("brightblue")
 
-summary <- readRDS("~/Electoral Behaviour/RDS/pathfinder_summary_456.rds")
+summary <- readRDS("~/Electoral Behaviour/RDS/MCMC_summary_seed123.rds")
 
 summary_wide <- summary %>%
   select(1,2)%>%
@@ -24,32 +24,22 @@ summary_wide <- summary %>%
 
 summary_cand <- summary_wide%>%slice(9168:9179)%>%select(c(1:3))
 
-plot(summary_cand$`value_1]`, summary_cand$`value_2]`)
+library(ggplot2)
+library(ggrepel)
 
+# costruisco il data.frame per il grafico (adatta se le dimensioni non corrispondono)
+plot_df <- summary_cand %>%
+  mutate(label = cand_long$candidate_name,
+         candidate_number = cand_long$candidate_number,
+         color = ifelse(candidate_number %% 2 == 1, "blue", "red"))
 
-#ADDING NAMES AND COLOURS
-lets <- read.csv('educ_data.csv')
-dat <- lets%>%
-  mutate(election = paste(lets[[13]], lets[[14]]))%>%
-  select(1, 16, 18, 19, 20, last_col())
-
-cand <- dat[1:7,] %>% select(2:5)
-
-cand_long <- cand %>%
-  pivot_longer(cols = everything(),
-               names_to = c(".value", "set"),
-               names_pattern = "(.*)_(.*)") %>%
-  select(-set)%>%
-  unique()%>%
-  mutate(candidate_number = 1:12)
-
-colors <- ifelse(cand_long$candidate_number %% 2 == 1, "blue", "red")
-
-text(
-  summary_cand$`value_1]`,
-  summary_cand$`value_2]`,
-  labels = cand_long$candidate_name,
-  pos = 4,
-  cex = 0.8,
-  col = colors
-)
+ggplot(plot_df, aes(x = `value_1]`, y = `value_2]`)) +
+  geom_point(size = 3) +
+  geom_text_repel(aes(label = label, colour = color),
+                  size = 5,          # dimensione testo
+                  box.padding = 0.3, # spazio attorno alle etichette
+                  point.padding = 0.4,
+                  max.overlaps = Inf) +
+  scale_colour_identity() +
+  labs(x = "Value 1", y = "Value 2") +
+  theme_minimal(base_size = 14)
