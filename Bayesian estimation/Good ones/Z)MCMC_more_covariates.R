@@ -85,7 +85,7 @@ listmore <- list(
   cand_b = as.numeric(unlist(cand_b)),
   dime = as.numeric(unlist(dime)),
   demo = as.matrix(unname(r)),
-  w_sigma = 0.25
+  w_par = 0.25
 )
 
 cov <- matio$sample(
@@ -102,7 +102,7 @@ summary_cov <- as.data.frame(cov$summary())
 
 cov_wide <- summary_cov %>%
   select(1,2)%>%
-  slice(3:nrow(supersummary))%>%
+  slice(3:nrow(summary_cov))%>%
   separate(variable,
            into = c("unit", "dimension"),
            sep = ",",

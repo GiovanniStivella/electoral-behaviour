@@ -10,7 +10,7 @@ pa_voting_districts <- voting_districts("PA")
 
 rmapshaper::ms_simplify(pa_voting_districts, keep=0.05, keep_shapes=TRUE)
 
-summary <- readRDS("~/Electoral Behaviour/RDS/pathfinder_summary_456.rds")
+summary <- readRDS("~/Electoral Behaviour/RDS/MCMC_summary_seed123.rds")
 
 summary_wide <- summary %>%
   select(1,2)%>%
@@ -51,8 +51,8 @@ ggplot(super_table) +
   theme_void() +
   scale_fill_gradient2(
     name = "first dimension",
-    high = "#00008B",   # red
-    low = "#8B0000",  #blue
+    high = "#8B0000",  #red
+    low = "#00008B",   #blue
     midpoint = 0,
     na.value = "grey"
   )
